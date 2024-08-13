@@ -3,6 +3,7 @@ import argparse
 import signal
 import time
 import logging
+from logging.handlers import RotatingFileHandler
 
 import httpx
 
@@ -26,11 +27,16 @@ class GracefulKiller:
 
 
 def main():
-    logging.basicConfig(
-        datefmt="%Y-%m-%d %H:%M:%S",
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    # setup handler max bytes is 1GB and backup count is 5
+    handler = RotatingFileHandler(
+        "kafka_connector_starter.log", maxBytes=1 << 30, backupCount=5
     )
-    logger = logging.getLogger(__name__)
+    handler.setFormatter(
+        logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    )
+    logger = logging.getLogger("kafka_connector_starter")
+    logger.setLevel(logging.INFO)
+    logger.addHandler(handler)
 
     logger.info("Starting Kafka Connector Starter")
 
