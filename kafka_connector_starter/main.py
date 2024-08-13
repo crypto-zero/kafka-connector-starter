@@ -50,7 +50,7 @@ def main():
                     task_status = response.json()["state"]
                     if task_status == "RUNNING":
                         print(f"Connector {connector} is already running")
-                        break
+                        continue
                     response = httpx.post(
                         f"{args.kafka_connect_url}/connectors/{connector}/tasks/{task_id}/restart"
                     )
@@ -61,10 +61,8 @@ def main():
                     )
         except httpx.HTTPStatusError as e:
             print(f"Failed to get connectors: {e}")
-            break
         except Exception as e:
             print(f"Failed to get connectors: {e}")
-            break
 
         # Sleep for 5 seconds
         time.sleep(5)
