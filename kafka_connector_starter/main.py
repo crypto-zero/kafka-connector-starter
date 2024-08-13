@@ -1,6 +1,7 @@
 import os
 import argparse
 import signal
+import time
 
 import httpx
 
@@ -58,13 +59,15 @@ def main():
                     print(
                         f"Restarted task {task_id} for connector {connector}: {task_trace}"
                     )
-            break
         except httpx.HTTPStatusError as e:
             print(f"Failed to get connectors: {e}")
             break
         except Exception as e:
             print(f"Failed to get connectors: {e}")
             break
+
+        # Sleep for 5 seconds
+        time.sleep(5)
 
 
 if __name__ == "__main__":
